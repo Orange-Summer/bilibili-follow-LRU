@@ -1,0 +1,8 @@
+user_id: '11111111'
+cookie: "test"
+User-Agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
+Referer: 'https://www.bilibili.com/'
+MAX_PAGE: 5
+PAGE_PER_NUM: 300
+telegram_bot_token: '11111111:AAAAAAAAAAAAAAAAAAAAAAAA'
+telegram_chat_id: '-10000000000000'

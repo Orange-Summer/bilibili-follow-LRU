@@ -1,0 +1,12 @@
+version: '1.0'
+services:
+  bilibili-follow-LRU:
+    build: .
+    image: bilibili-follow-lru:v1
+    container_name: bilibili-follow-LRU
+    volumes:
+      - /volume1/docker/bilibili/log:/bilibili_follow_LRU/log
+      - /volume1/docker/bilibili/config:/bilibili_follow_LRU/config
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
