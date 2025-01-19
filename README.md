@@ -2,6 +2,8 @@
 
 统计 Bilibili 长时间未观看的关注的 up 主，定时通过 telegram bot 发送消息。
 
+目前只统计并通知一个月和三个月未观看的 up 主，需要程序保持运行一直读取观看历史记录并更新关注 up 主的最新观看时间。
+
 ## 运行方式
 
 ### 1. 建立映射路径
@@ -31,6 +33,14 @@ config.yaml需要修改以下参数:
 
 ```bash
 docker-compose up -d
+```
+
+## 修改通知时间
+
+参考 [schedule库文档](https://schedule.readthedocs.io/)修改 main.py 中的下述代码
+
+```python
+schedule.every().day.at("10:13", "Asia/Shanghai").do(job)
 ```
 
 ## 注意事项
