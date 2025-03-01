@@ -10,7 +10,7 @@ from followed_content_creator_crawler import get_all_following_up_details
 from logging.handlers import RotatingFileHandler
 from read_configuration import read_configuration
 from send_telegram import send_message
-from src.database import create_database
+from database import create_database
 
 
 def send_message_to_telegram(one_month_ago, three_month_ago):
