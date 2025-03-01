@@ -1,3 +1,4 @@
+import datetime
 import logging
 import requests
 import sqlite3
@@ -11,7 +12,7 @@ logger = logging.getLogger('my_logger')
 def get_configuration():
     cookie, user_agent, referer = read_configuration('cookie', 'User-Agent', 'Referer')
     cookies = {i.split("=")[0]: i.split("=")[-1] for i in cookie.split("; ")}
-    headers = {  # 我这里用的是chrome浏览器
+    headers = {
         'User-Agent': user_agent,
         'Referer': referer,
     }
@@ -31,8 +32,12 @@ def get_all_following_up_details(user_id):
     page = 1
     conn = sqlite3.connect('database/bilibili.db')
     cursor = conn.cursor()
-    old = 0
-    new = 0
+    add_num = 0
+    cursor.execute("SELECT COUNT(*) FROM users")
+    total_count = cursor.fetchone()[0]
+    total_count_new = 0
+    mid_list = []
+    curr_time = int(datetime.datetime.now().timestamp())
     while True:
         data = get_following_up_list(page, user_id)
         if 'data' not in data:
@@ -41,17 +46,25 @@ def get_all_following_up_details(user_id):
         followings = data['data']['list']
         if not followings:
             break
+        mid_list = mid_list + [up['mid'] for up in followings]
         for up in followings:
             up_name = up['uname']
             up_mid = up['mid']
             cursor.execute('SELECT 1 FROM users WHERE mid = ?', (up_mid,))
             result = cursor.fetchone()
             if result:
-                old += 1
+                total_count_new += 1
             else:
-                cursor.execute('INSERT INTO users (mid, name,latest_time) VALUES (?, ?, ?)', (up_mid, up_name, -1))
-                new += 1
+                cursor.execute('INSERT INTO users (mid, name,latest_time) VALUES (?, ?, ?)',
+                               (up_mid, up_name, curr_time))
+                total_count_new += 1
+                add_num += 1
+
         page += 1
-    logger.info(f"检索{old + new}名关注up主，存在{old}名up主，新增{new}名up主")
+    placeholders = ', '.join(['?'] * len(mid_list))
+    sql = f"DELETE FROM users WHERE mid NOT IN ({placeholders})"
+    cursor.execute(sql, mid_list)
+    logger.info(
+        f"数据库存在{total_count}名up主，新增{add_num}名up主，取关{total_count + add_num - total_count_new}名up主，现在关注{total_count_new}名up主")
     conn.commit()
     conn.close()
