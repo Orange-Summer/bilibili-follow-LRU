@@ -8,9 +8,9 @@
 
 ### 1. 建立映射路径
 
-在宿主机建立两个文件夹分别用于映射容器中的 config 和 log 文件夹
+在宿主机建立三个文件夹分别用于映射容器中的 config、log 和 database 文件夹
 
-在这两个文件夹参考项目分别新建 config.yaml 和 bilibili.log
+在 config 和 log 对应的两个文件夹中参考项目分别新建 config.yaml 和 bilibili.log
 
 ### 2. 配置 config.yaml
 
